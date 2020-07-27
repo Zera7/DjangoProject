@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LinkShortener</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% load static %}
+</head>
+
+<body>
+<nav class="navbar navbar-default">
+    <a class="navbar-brand" href="/">Link Shortener</a>
+    <ul class="nav navbar-nav">
+        <li><a href="">All links</a></li>
+    </ul>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12" style="vertical-align: middle">
+            <div class="jumbotron"
+                 style="background-image: url({% static 'cover.jpg' %}); background-size: cover; height: 607px;">
+                <h1 style="color: white; text-align: center; padding: 50px;">
+                    Hi there!
+                </h1>
+                <h2 style="color: white; text-align: center">
+                    You can shorten your URL here
+                </h2>
+                <form class="form-horizontal" id="url_submit_form" method="POST" action="/" style="top: 50%; left: 50%">
+                    {% csrf_token %}
+                    <div class="form-group" style="margin: auto; padding: 50px;">
+                        <div class="input-group input-group-lg">
+                            <input type="url" name="url" class="form-control"
+                                   required="required"
+                                   placeholder="Put URL here"
+                                   id="url_input"
+                                   aria-describedby="sizing-addon1">
+                            <span class="input-group-btn">
+                        <button type="submit" class="btn btn-primary btn-lg">Shorten</button>
+                    </span>
+                        </div>
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                <p>{{ error }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if shorturl %}
+                            <div class="alert alert-success" role="alert">
+                                <p>Shortened link: <a href="{{ shorturl }}">{{ shorturl }}</a></p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
