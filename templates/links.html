@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>LinkShortener</title>
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+<nav class="navbar navbar-default">
+    <a class="navbar-brand" href="/">Link Shortener</a>
+    <ul class="nav navbar-nav">
+        <li><a href="{% url "links" %}">All links</a></li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Original URL</th>
+                    <th scope="col">Shortened URL</th>
+                    <th scope="col">Redir. num</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in links %}
+                    <tr>
+                        <th scope="row">{{ item.id }}</th>
+                        <td><a href="{{ item.original }}">{{ item.original }}</a></td>
+                        <td>
+                            <a href="{{ request.scheme }}://{{ request.get_host }}/{{ item.hash }}">{{ request.scheme }}://{{ request.get_host }}/{{ item.hash }}</a>
+                        </td>
+                        <td>{{ item.redir_num }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

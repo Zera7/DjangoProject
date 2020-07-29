@@ -41,3 +41,15 @@ def home(request):
 
     return render(request, "home.html",
                   {"error": url_error, "shorturl": short_url})
+
+
+def links(request):
+    """All links page
+
+    :param request: an HttpRequest object that contains metadata about the request
+    :return: provides a template of all links with data
+    """
+    links = models.Link.objects.all().order_by('-redir_num')  # Get all links from database and order them by
+    # num of redirects
+    return render(request, "links.html",
+                  {"links": links})
