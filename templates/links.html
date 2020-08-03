@@ -25,6 +25,7 @@
                     <th scope="col">Original URL</th>
                     <th scope="col">Shortened URL</th>
                     <th scope="col">Redir. num</th>
+                    <th scope="col">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -36,6 +37,7 @@
                             <a href="{{ request.scheme }}://{{ request.get_host }}/{{ item.hash }}">{{ request.scheme }}://{{ request.get_host }}/{{ item.hash }}</a>
                         </td>
                         <td>{{ item.redir_num }}</td>
+                        <td><a href="/delete/{{ item.id }}" class="glyphicon glyphicon-trash"> Delete</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>

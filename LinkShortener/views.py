@@ -1,6 +1,8 @@
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import URLValidator
-from django.shortcuts import render
+from django.db.models import F
+from django.http import Http404
+from django.shortcuts import render, redirect
 
 from LinkShortener import models
 
@@ -53,3 +55,32 @@ def links(request):
     # num of redirects
     return render(request, "links.html",
                   {"links": links})
+
+
+def delete(request, linkid):
+    """Delete link method
+    :param request: an HttpRequest object that contains metadata about the request
+    :param linkid: an identifier of the link to delete
+    :return: redirects to all links page
+    """
+    # Check if a link with such id exists
+    try:
+        link = models.Link.objects.get(id=linkid)
+        link.delete()
+    finally:
+        return redirect("/links/")
+
+
+def redir(request, linkhash):
+    """Redirection method (from short link to original)
+    :param request: an HttpRequest object that contains metadata about the request
+    :param linkhash: a hash of the original link (the 6 chars after the domain name)
+    :return: redirects to original link or drops an error 404 (Not found)
+    """
+    # Check if a link with such hash exists
+    try:
+        link = models.Link.objects.get(hash=linkhash)
+        models.Link.objects.filter(hash=linkhash).update(redir_num=F('redir_num') + 1)
+        return redirect(link.original)
+    finally:
+        return redirect("/links/")
