@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import URLValidator
 from django.db.models import F
-from django.http import Http404
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 
 from LinkShortener import models
@@ -82,5 +82,5 @@ def redir(request, linkhash):
         link = models.Link.objects.get(hash=linkhash)
         models.Link.objects.filter(hash=linkhash).update(redir_num=F('redir_num') + 1)
         return redirect(link.original)
-    finally:
-        return redirect("/links/")
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound('<h1>Link not found.</h1>')
